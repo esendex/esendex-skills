@@ -1,0 +1,7 @@
+node_modules/
+esendex-docs/
+install.log
+dist/
+.DS_Store
+__pycache__/
+*.pyc

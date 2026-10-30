@@ -1,0 +1,14 @@
+{
+  "name": "esendex-marketplace",
+  "owner": {
+    "name": "Esendex",
+    "url": "https://www.esendex.co.uk"
+  },
+  "plugins": [
+    {
+      "name": "esendex-developer-kit",
+      "source": "./esendex-developer-kit",
+      "description": "Skills for the Esendex (Commify) v2 REST API and SMPP interface."
+    }
+  ]
+}

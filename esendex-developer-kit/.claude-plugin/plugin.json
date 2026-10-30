@@ -1,0 +1,20 @@
+{
+  "name": "esendex-developer-kit",
+  "version": "4.0.0",
+  "description": "Five skills for the Esendex (Commify) v2 REST API and SMPP interface: set up an account, send a message, track delivery, manage contacts and consent, and connect over SMPP. Task-oriented reference with Python and Node.js examples, and a shared standard-library Python client.",
+  "author": {
+    "name": "Esendex",
+    "url": "https://www.esendex.co.uk"
+  },
+  "keywords": [
+    "esendex",
+    "commify",
+    "sms",
+    "messaging",
+    "smpp",
+    "api"
+  ],
+  "homepage": "https://developer.esendex.co.uk",
+  "repository": "https://github.com/esendex/esendex-skills",
+  "license": "Apache-2.0"
+}

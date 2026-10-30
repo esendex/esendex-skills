@@ -1,0 +1,33 @@
+{
+  "skill_name": "esendex-developer-kit",
+  "skill_paths": [
+    "esendex-developer-kit/skills/esendex-setup-account",
+    "esendex-developer-kit/skills/esendex-send-message",
+    "esendex-developer-kit/skills/esendex-track-delivery",
+    "esendex-developer-kit/skills/esendex-manage-contacts",
+    "esendex-developer-kit/skills/esendex-connect-smpp"
+  ],
+  "evals": [
+    {
+      "id": 0,
+      "name": "personalised-bulk-send-with-optout-scrub",
+      "prompt": "We use Esendex for our SMS. I've got a CSV at ./renewals.csv with columns name,mobile,policy_no,renewal_date - about 4000 rows, UK mobiles mostly in 07... format. I need to text each of them something like 'Hi <first name>, your policy <policy no> renews on <date>, reply HELP if you need us'. Write me a python script that does it properly - I don't want to accidentally text people who've unsubscribed and I don't want a surprise bill. Sender should show as PolicyCo.",
+      "expected_output": "A Python script that: normalises the 07... numbers to E.164 (+44...), pulls the opt-out list from /v2/optouts and filters those recipients out reporting how many were skipped, POSTs to /v2/messages with X-Api-Key auth, accountReference, channel SMS, from PolicyCo, body.text with square-bracket variables and a per-recipient variables object, batches rather than sending 4000 in one request, treats 202 as queued not delivered, and estimates message parts / warns about Unicode cost before sending. Credentials read from env, not hardcoded.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "delivery-failure-triage",
+      "prompt": "Yesterday we sent a big SMS campaign through Esendex and our client says loads of people never got it. Can you write me something that pulls the numbers so I can tell them what actually happened? I want to know how many were delivered vs failed and the reasons why, and which ones are worth trying again. Our account ref is EXUK0000000.",
+      "expected_output": "A script that queries GET /v2/requests for campaign rollup counts and/or GET /v2/messages filtered by status/time, paginates explicitly with a large pageSize (not relying on the default of 1), groups failures by the reason field, and separates permanent reasons (MsisdnInvalid, senderIdInvalid, OptedOut, LandlineNotAllowed, DestinationNotAllowed, MessagePartCountExceeded) from transient/retryable ones (NetworkFailed, EdgeFailed, InternalError, Unprocessable, FailedToRoute), explicitly noting OptedOut must never be retried. Uses X-Api-Key plus AccountReference headers.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "scheduled-throttled-campaign-timezone",
+      "prompt": "I need to send a marketing SMS to about 30k customers via Esendex but our support team can't handle 30k replies landing at once, and legal say marketing texts can only go out 9am-6pm UK time on weekdays. It needs to start next Monday. What's the right way to do this and can you write the API call?",
+      "expected_output": "Should recommend a throttle schedule (POST /v2/throttle-schedule) rather than a plain send or a delayed schedule, and explain why. Must set timeSlotStart/timeSlotEnd and daysOfWeek to confine sending to weekday business hours, use rateOfSend or endDate to spread the volume, and must convert 9am-6pm UK local time to UTC (08:00-17:00Z during BST) instead of passing 09:00/18:00 directly, noting that the API takes times in UTC. Should use messageType MarketingAndResearch. Bonus: mentions opt-out scrubbing, and that pause/resume and the unsent-recovery endpoint exist.",
+      "files": []
+    }
+  ]
+}
